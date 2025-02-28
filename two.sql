@@ -11,17 +11,17 @@ CREATE TABLE ORDERS (ORD_NO INTEGER PRIMARY KEY, PURCHASE_AMT INTEGER,ORD_DATE D
 INSERT INTO ORDERS VALUES(101, 7000, '2017-08-21, 2002, 1005);
 
 
-Query 1: 
+-- Query 1: 
 SELECT COUNT(Customer_id) FROM CUSTOMER WHERE GRADE>(SELECT AVG(GRADE) FROM CUSTOMER WHERE CITY='BANGALORE');
 
-Query 2: 
+-- Query 2: 
 SELECT S.Salesman_id,S.Name FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id GROUP BY S.Salesman_id,S.Name HAVING COUNT(Customer_id)>1;  
 
-Query 3: 
+-- Query 3: 
 SELECT S.Salesman_id FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id AND S.City!=C.City UNION SELECT S.Salesman_id FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id AND S.City=C.City; 
 
-Query 4: 
+-- Query 4: 
 create view SALESMAN_WITH_MAX_ORDER as select B.ORD_DATE, A.SALESMAN_ID, A.NAME from salesman a, orders b where a.salesman_id=b.salesman_id and b.purchase_amt=(select max(purchase_amt) from orders c where c.ord_date=b.ord_date); 
 
-Query 5: 
+-- Query 5: 
 DELETE FROM SALESMAN WHERE Salesman_id=1000; 
