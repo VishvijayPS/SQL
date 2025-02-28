@@ -1,0 +1,94 @@
+One:-
+
+Query 1: 
+SELECT B.Book_id,Title,P.Name,Author_Name,Branch_id,No_of_copies FROM Book B, Book_Authors BA,Publisher P,Book_Copies BC WHERE B.Book_id=BA.Book_id AND B.Publisher_Name=P.Name AND B.Book_id=BC.Book_id; 
+
+
+Query 2: 
+SELECT Card_No,COUNT(*) FROM BOOK_LENDING WHERE Date_out BETWEEN '2017-01-01' AND '2017-06-30' GROUP BY Card_No HAVING COUNT(*)>3; 
+
+
+Query 3: 
+DELETE FROM BOOK WHERE Book_id='101'; 
+
+Query 4: 
+CREATE VIEW V_PUBLICATION AS SELECT PUB_YEAR FROM BOOK;
+
+Query 5: 
+CREATE VIEW TOTAL_BOOK_COPIES(Book_id,Total_Books) AS Select Book_id, SUM(No_of_copies) FROM BOOK_COPIES GROUP BY Book_id; 
+
+
+Two:-
+
+Query 1: 
+SELECT COUNT(Customer_id) FROM CUSTOMER WHERE GRADE>(SELECT AVG(GRADE) FROM CUSTOMER WHERE CITY='BANGALORE');
+
+Query 2: 
+SELECT S.Salesman_id,S.Name FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id GROUP BY S.Salesman_id,S.Name HAVING COUNT(Customer_id)>1;  
+
+Query 3: 
+SELECT S.Salesman_id FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id AND S.City!=C.City UNION SELECT S.Salesman_id FROM SALESMAN S,CUSTOMER C WHERE S.Salesman_id=C.Salesman_id AND S.City=C.City; 
+
+Query 4: 
+create view SALESMAN_WITH_MAX_ORDER as select B.ORD_DATE, A.SALESMAN_ID, A.NAME from salesman a, orders b where a.salesman_id=b.salesman_id and b.purchase_amt=(select max(purchase_amt) from orders c where c.ord_date=b.ord_date); 
+
+Query 5: 
+DELETE FROM SALESMAN WHERE Salesman_id=1000; 
+
+
+Three:-
+
+Query 1: 
+select MOV_TITLE from MOVIES where DIR_ID=(select DIR_ID from director where DIR_NAME = 'HITCHCOCK'); 
+
+Query 2: 
+select M.MOV_ID,MOV_TITLE from MOVIES M,MOVIE_CAST MC where M.MOV_ID=MC.MOV_ID and ACT_ID in ( select ACT_ID from MOVIE_CASt group by ACT_ID having count(*)>=2) order by M.MOV_ID; 
+
+Query 3: 
+select A.ACT_ID,ACT_NAME from ACTOR A, MOVIES M, MOVIE_CAST MC where A.ACT_ID= MC.ACT_ID and M.MOV_ID =MC.MOV_ID and MOV_YEAR> 2015 INTERSECT select A.ACT_ID,ACT_NAMe from ACTOR A, MOVIES M, MOVIE_CAST MC where A.ACT_ID =MC.ACT_ID and M.MOV_ID =MC.MOV_ID and MOV_YEAR< 2000; 
+
+Query 4: 
+select MOV_TITLE,REV_STARS from MOVIES M, RATING R where M.MOV_ID= R.MOV_ID and REV_STARS in (select max(REV_STARS) from rating) order by MOV_TITLE;
+
+Query 5: 
+update rating set REV_STARS= 5 where MOV_ID IN (select MOV_ID from MOVIES M, DIRECTOR D where M.DIR_ID =D.DIR_ID and DIR_NAME='STEVEN SPIELBERG');  
+
+
+Four:-
+
+Query 1:  
+select s.usn,s.sname,address,phone,gender from student s, semsec ss, class c where s.usn = c.usn and c.ssid = ss.ssid and sem =5 and sec ='B'; 
+
+
+Query 2: 
+select ss.sem, ss.sec,s.gender,count(s.gender) as count from student s, semsec ss,class c where s.usn=c.usn and    ss.ssid=c.ssid group by ss.sem,ss.sec,s.gender order by sem; 
+
+
+Query 3: 
+create view stu_test1_marks_view as select test1, subcode from iamarks where usn='4MT15CS005';
+select * from stu_test1_marks_view; 
+
+Query 4: 
+CREATE OR REPLACE PROCEDURE AVGMARKS IS CURSOR C_IAMARKS IS 
+SELECT GREATEST(TEST1,TEST2) AS A, GREATEST(TEST1,TEST3) AS B, 
+GREATEST(TEST3,TEST2) AS C FROM IAMARKS WHERE FINALIA IS NULL FOR UPDATE 
+C_A NUMBER; 
+C_B NUMBER; 
+C_C NUMBER; 
+C_SM NUMBER; 
+C_AV NUMBER; 
+ 
+ 
+BEGIN 
+OPEN C_IAMARKS; LOOP 
+FETCH C_IAMARKS INTO C_A, C_B, C_C; EXIT WHEN C_IAMARKS%NOTFOUND; --DBMS_OUTPUT.PUT_LINE(C_A || ' ' || C_B || ' ' ||C_C); IF (C_A != C_B) 
+THEN C_SM:=C_A+C_B; ELSE C_SM:=C_A+C_C; END IF; 
+C_AV:=C_SM/2; --DBMS_OUTPUT.PUT_LINE('SUM = '||C_SM); --DBMS_OUTPUT.PUT_LINE('AVERAGE = '||C_AV); 
+UPDATE IAMARKS SET FINALIA=C_AV WHERE CURRENT OF C_IAMARKS; END LOOP; 
+CLOSE C_IAMARKS; 
+END; 
+/ 
+
+  
+Query 5: 
+select s.usn,sname,finalia, (CASE WHEN finalia>=17 and finalia<=20 then 'Outstanding' WHEN finalia>=12 and finalia<17 then 'Average' WHEN finalia<12 then 'Weak' END) CAT from student s, iamarks ia where s.usn=ia.usn; 
