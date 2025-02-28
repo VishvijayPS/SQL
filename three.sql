@@ -16,17 +16,17 @@ INSERT INTO MOVIE_CAST VALUES(1,11,'HERO');
 CREATE TABLE RATING( MOV_ID INT, REV_STARS INT, PRIMARY KEY(MOV_ID), FOREIGN KEY(MOV_ID) REFERENCES MOVIES(MOV_ID)); 
 NSERT INTO RATING VALUES(11,5); 
 
-Query 1: 
+-- Query 1: 
 select MOV_TITLE from MOVIES where DIR_ID=(select DIR_ID from director where DIR_NAME = 'HITCHCOCK'); 
 
-Query 2: 
+-- Query 2: 
 select M.MOV_ID,MOV_TITLE from MOVIES M,MOVIE_CAST MC where M.MOV_ID=MC.MOV_ID and ACT_ID in ( select ACT_ID from MOVIE_CASt group by ACT_ID having count(*)>=2) order by M.MOV_ID; 
 
-Query 3: 
+-- Query 3: 
 select A.ACT_ID,ACT_NAME from ACTOR A, MOVIES M, MOVIE_CAST MC where A.ACT_ID= MC.ACT_ID and M.MOV_ID =MC.MOV_ID and MOV_YEAR> 2015 INTERSECT select A.ACT_ID,ACT_NAMe from ACTOR A, MOVIES M, MOVIE_CAST MC where A.ACT_ID =MC.ACT_ID and M.MOV_ID =MC.MOV_ID and MOV_YEAR< 2000; 
 
-Query 4: 
+-- Query 4: 
 select MOV_TITLE,REV_STARS from MOVIES M, RATING R where M.MOV_ID= R.MOV_ID and REV_STARS in (select max(REV_STARS) from rating) order by MOV_TITLE;
 
-Query 5: 
+-- Query 5: 
 update rating set REV_STARS= 5 where MOV_ID IN (select MOV_ID from MOVIES M, DIRECTOR D where M.DIR_ID =D.DIR_ID and DIR_NAME='STEVEN SPIELBERG');  
