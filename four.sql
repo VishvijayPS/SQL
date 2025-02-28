@@ -18,19 +18,19 @@ CREATE TABLE IAMARKS(USN CHAR( 10) REFERENCES STUDENT(USN), SUBCODE VARCHAR(8) R
 INSERT INTO IAMARKS VALUES('4MT15CS001','15CS51',1,17,18,15,NULL); 
 
 
-Query 1:  
+-- Query 1:
 select s.usn,s.sname,address,phone,gender from student s, semsec ss, class c where s.usn = c.usn and c.ssid = ss.ssid and sem =5 and sec ='B'; 
 
 
-Query 2: 
+-- Query 2: 
 select ss.sem, ss.sec,s.gender,count(s.gender) as count from student s, semsec ss,class c where s.usn=c.usn and    ss.ssid=c.ssid group by ss.sem,ss.sec,s.gender order by sem; 
 
 
-Query 3: 
+-- Query 3: 
 create view stu_test1_marks_view as select test1, subcode from iamarks where usn='4MT15CS005';
 select * from stu_test1_marks_view; 
 
-Query 4: 
+-- Query 4: 
 CREATE OR REPLACE PROCEDURE AVGMARKS IS CURSOR C_IAMARKS IS 
 SELECT GREATEST(TEST1,TEST2) AS A, GREATEST(TEST1,TEST3) AS B, 
 GREATEST(TEST3,TEST2) AS C FROM IAMARKS WHERE FINALIA IS NULL FOR UPDATE 
@@ -52,5 +52,5 @@ END;
 / 
 
   
-Query 5: 
+-- Query 5: 
 select s.usn,sname,finalia, (CASE WHEN finalia>=17 and finalia<=20 then 'Outstanding' WHEN finalia>=12 and finalia<17 then 'Average' WHEN finalia<12 then 'Weak' END) CAT from student s, iamarks ia where s.usn=ia.usn; 
