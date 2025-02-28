@@ -20,19 +20,19 @@ CREATE TABLE BOOK_LENDING(BOOK_ID INT REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE
 INSERT INTO BOOK_LENDING VALUES(101,101,02,'2017-08-17','2017-08-25'); 
 
 
-Query 1: 
+-- Query 1: 
 SELECT B.Book_id,Title,P.Name,Author_Name,Branch_id,No_of_copies FROM Book B, Book_Authors BA,Publisher P,Book_Copies BC WHERE B.Book_id=BA.Book_id AND B.Publisher_Name=P.Name AND B.Book_id=BC.Book_id; 
 
 
-Query 2: 
+-- Query 2: 
 SELECT Card_No,COUNT(*) FROM BOOK_LENDING WHERE Date_out BETWEEN '2017-01-01' AND '2017-06-30' GROUP BY Card_No HAVING COUNT(*)>3; 
 
 
-Query 3: 
+-- Query 3: 
 DELETE FROM BOOK WHERE Book_id='101'; 
 
-Query 4: 
+-- Query 4: 
 CREATE VIEW V_PUBLICATION AS SELECT PUB_YEAR FROM BOOK;
 
-Query 5: 
+-- Query 5: 
 CREATE VIEW TOTAL_BOOK_COPIES(Book_id,Total_Books) AS Select Book_id, SUM(No_of_copies) FROM BOOK_COPIES GROUP BY Book_id; 
