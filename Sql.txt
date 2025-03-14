@@ -92,3 +92,28 @@ END;
   
 Query 5: 
 select s.usn,sname,finalia, (CASE WHEN finalia>=17 and finalia<=20 then 'Outstanding' WHEN finalia>=12 and finalia<17 then 'Average' WHEN finalia<12 then 'Weak' END) CAT from student s, iamarks ia where s.usn=ia.usn; 
+
+Five:-
+
+Query 1: 
+ 
+select pno from employee5 e, works_on5 w where e.ssn=w.ssn and name='Scott' UNION select pno from employee5 e, department5 d, project5 p where e.ssn=d.mgrssn and d.dno=p.pno and name='Scott' ;
+
+
+Query 2: 
+ 
+select Name, Salary "Old Salary", Salary* 1.1 "New Salary" from employee5 e,works_on5 w, project5 p where e.ssn =w.ssn and w.pno= p.pno and pname = 'IoT'; 
+
+
+Query 3: 
+ 
+select sum(salary) "Total Salary", Max(Salary) "Maximum Salary" , Min(Salary) "Minimum Salary", Avg(Salary) "Average Salary" from employee5 e, department5 d where e.dno= d.dno and dname='Accounts';
+
+
+Query 4: 
+ 
+select e.name from employee5 e where not exists ((select pno from project5 where dno=5) except (select pno from works_on5 where e.ssn= ssn)); 
+
+
+Query 5: 
+select dno, (select count(*) from employee5 where salary>600000 and dno in (select dno from employee5 group by dno having count(*)>=5 )) as count_salary from employee5 group by dno having count(*)>=5; 
